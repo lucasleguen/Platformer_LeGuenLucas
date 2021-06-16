@@ -194,10 +194,6 @@ class SceneOne extends Phaser.Scene{
         rage.setCollideWorldBounds(false);
         rage.body.setAllowGravity(false);
         
-        // tortue
-    tortue.setCollideWorldBounds(false);
-    tortue.body.setAllowGravity(false);
-        
    particles_cendre = this.add.particles('cendre');
         emitter_particles_cendre = particles_cendre.createEmitter({
             x:0,
@@ -325,18 +321,7 @@ class SceneOne extends Phaser.Scene{
         repeat:-1
     });
         
-     // tortue1  
-    this.tweens.add({
-        targets: tortue,
-        props: {
-            x:{value: 600,duration:2400},
-        },
-        yoyo:true,
-        repeat:-1
-    });
-        
         // rage
-        
     this.anims.create({
         key: 'rage',
         frames: this.anims.generateFrameNumbers('rage', { start: 0, end: 29 }),
@@ -455,14 +440,14 @@ class SceneOne extends Phaser.Scene{
                 // gauche
                 if (cursors.left.isDown && canAttack == true && grimper == true)
                 {
-                    player.setVelocityX(-300);
+                    player.setVelocityX(-150);
                     player.anims.play('fleft', true);
                 }
 
                 // droite
                 if (cursors.right.isDown && canAttack == true && grimper == true)
                 {
-                    player.setVelocityX(300);
+                    player.setVelocityX(150);
                     player.anims.play('fright', true);
                 }    
                 else if (canAttack == true && player.body.blocked.down && cursors.right.isUp && cursors.left.isUp && cursors.up.isUp && cursors.down.isUp)
@@ -479,13 +464,13 @@ class SceneOne extends Phaser.Scene{
 
                 if (cursors.up.isDown && cursors.right.isDown && cursors.down.isDown && player.body.blocked.down && canAttack == true)
                 {
-                    player.setVelocityY(-270);
+                    player.setVelocityY(-100);
                     player.setVelocityX(1000);
                 }
 
                 if (cursors.up.isDown && cursors.left.isDown && cursors.down.isDown && player.body.blocked.down && canAttack == true)
                 {
-                    player.setVelocityY(-270);
+                    player.setVelocityY(-100);
                     player.setVelocityX(-1000);
                 }
                   }
