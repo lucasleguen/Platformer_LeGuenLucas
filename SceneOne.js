@@ -54,6 +54,9 @@ var emitter_particles_cendre;
 var debutsceneonemusic = true;
 var sceneonemusic;
 
+// Instant kill
+var box
+
 class SceneOne extends Phaser.Scene{
     constructor(){
         super("sceneOne");
@@ -62,9 +65,17 @@ class SceneOne extends Phaser.Scene{
     }
     preload(){
     this.load.image('tuile', 'assets/tuile1.png');
-    this.load.tilemapTiledJSON('map', 'map1.json')    
+    this.load.tilemapTiledJSON('map', 'map1.json')
         
-    this.load.image('background1', 'assets/background.png');
+    // Background
+        
+    this.load.image('fond', 'assets/background.png');
+    this.load.image('village', 'background/fond1.png');
+    this.load.image('foret', 'background/1.png');
+    this.load.image('foretd', 'background/2.png');
+    this.load.image('montagne', 'background/3.png');
+    this.load.image('montagned', 'background/4.png');
+
     this.load.image('backgroundmaison', 'assets/backgroundmaison.png');
     this.load.image('coeur', 'assets/coeur.png');
     this.load.image('coeurvide', 'assets/coeurvide.png')
@@ -106,12 +117,29 @@ class SceneOne extends Phaser.Scene{
     this.load.image('attaque', 'assets/attaque.png');
     this.load.image('platform', 'assets/platform.png');
     this.load.image('grasse', 'assets/grass.png');
+    this.load.image('box', 'assets/box.png');
 }
 
     create(){
         
+        //background
+        this.add.image(0, 0, 'fond').setOrigin(0);
         
-        this.add.image(0, 0, 'background1').setOrigin(0);
+        /*
+         this.add.image(0, 0, 'montagned', [
+        {
+            frequency: 100,
+            lifespan: 30000,
+            speedX: { min: 80, max: 120 },
+        }]);
+        
+        this.add.image(0, 0, 'montagne', [
+        {
+            lifespan: 30000,
+            speedX: { min: 140, max: 300 },
+        }]);
+        */
+        
         
             // musique
         sceneonemusic = this.sound.add("sceneonemusic");
@@ -122,7 +150,6 @@ class SceneOne extends Phaser.Scene{
         rage.body.setAllowGravity(false);
         
         // chaire
-        
         chaires=this.physics.add.group ();
         chaire1=chaires.create(1550,340,'chaire');
         chaire2=chaires.create(4285,770,'chaire');
@@ -134,6 +161,11 @@ class SceneOne extends Phaser.Scene{
         // chaire2
         chaire2.setCollideWorldBounds(false);
         chaire2.body.setAllowGravity(false);
+        
+        // box
+        box=this.physics.add.sprite(9115,900,'box');
+        box.setCollideWorldBounds(false);
+        box.body.setAllowGravity(false);
     
         //tortue
         
@@ -369,6 +401,7 @@ class SceneOne extends Phaser.Scene{
     this.physics.add.collider(player, terrain);    
     this.physics.add.overlap(player, chaire1, loup, null,this);    
     this.physics.add.overlap(player, chaire2, loup, null,this);    
+    this.physics.add.overlap(player, box, instantkill, null,this);    
         
         function hitballe(player,tortue) {
         if (invincible==false){
@@ -395,7 +428,54 @@ class SceneOne extends Phaser.Scene{
         setTimeout(function(){invincible=false},3000);
     }
 }
+        
+        function instantkill(player,box) {
+        if (invincible==false){
+            pdv-=1;
+       
+            
+            if (pdv==2){
+                coeur3.setVisible(false);
+                coeurv3.setVisible(true);
+                 coeur2.setVisible(false);
+                coeurv2.setVisible(true);
+                coeur1.setVisible(false);
+                coeurv1.setVisible(true);
+                this.physics.pause();
+                player.setTint(0xff0000);
+                this.add.text(200, 280, 'YOU DIED', { font: "40px Arial Black", fill: "#000" }).setScrollFactor(0);
+                
+            }
+            if (pdv==1){
+                coeur3.setVisible(false);
+                coeurv3.setVisible(true);
+                 coeur2.setVisible(false);
+                coeurv2.setVisible(true);
+                coeur1.setVisible(false);
+                coeurv1.setVisible(true);
+                this.physics.pause();
+                player.setTint(0xff0000);
+                this.add.text(200, 280, 'YOU DIED', { font: "40px Arial Black", fill: "#000" }).setScrollFactor(0);
+            }
+            if (pdv==0){
+                coeur3.setVisible(false);
+                coeurv3.setVisible(true);
+                 coeur2.setVisible(false);
+                coeurv2.setVisible(true);
+                coeur1.setVisible(false);
+                coeurv1.setVisible(true);
+                this.physics.pause();
+                player.setTint(0xff0000);
+                this.add.text(200, 280, 'YOU DIED', { font: "40px Arial Black", fill: "#000" }).setScrollFactor(0);
+            }
+            
+        invincible=true;
+        setTimeout(function(){invincible=false},3000);
+    }
 }
+}
+    
+    
     
     update(){        
          if (formeBestiale ==false){
@@ -431,7 +511,8 @@ class SceneOne extends Phaser.Scene{
     debutsceneonemusic=false;
 }
         
-        
+         
+
         
 // HUMAINE-------------------------------------------------------
     if(formeBestiale==false){
