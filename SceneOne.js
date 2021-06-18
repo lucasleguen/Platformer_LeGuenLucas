@@ -27,6 +27,7 @@ var vietortue = true;
 var comptinv=100;
 var invincible=false;
 var tortue;
+var tortue2;
 var cursors;
 var maison;
 var changementZone3;
@@ -41,6 +42,7 @@ var formeBestiale=false;
 var viande = true;
 var chaire1;
 var chaire2;
+var chaire3;
 var chaires;
 
 // rage
@@ -56,6 +58,7 @@ var sceneonemusic;
 
 // Instant kill
 var box
+var box2
 
 class SceneOne extends Phaser.Scene{
     constructor(){
@@ -153,6 +156,7 @@ class SceneOne extends Phaser.Scene{
         chaires=this.physics.add.group ();
         chaire1=chaires.create(1550,340,'chaire');
         chaire2=chaires.create(4285,770,'chaire');
+        chaire3=chaires.create(11864,574,'chaire');
         
         // chaire1
         chaire1.setCollideWorldBounds(false);
@@ -162,10 +166,19 @@ class SceneOne extends Phaser.Scene{
         chaire2.setCollideWorldBounds(false);
         chaire2.body.setAllowGravity(false);
         
+        // chaire3
+        chaire3.setCollideWorldBounds(false);
+        chaire3.body.setAllowGravity(false);
+        
         // box
         box=this.physics.add.sprite(9115,900,'box');
         box.setCollideWorldBounds(false);
         box.body.setAllowGravity(false);
+        
+        // box
+        box2=this.physics.add.sprite(12394,1380,'box');
+        box2.setCollideWorldBounds(false);
+        box2.body.setAllowGravity(false);
     
         //tortue
         
@@ -175,7 +188,7 @@ class SceneOne extends Phaser.Scene{
         const nocolid = map.createLayer('nocolid', tileset, 0, 0);
         
         // joueur
-        player = this.physics.add.sprite(100,100, 'fillestatique');
+        player = this.physics.add.sprite(272,350, 'fillestatique');
         player.setCollideWorldBounds(false);
         player.setScale(0.7);
             
@@ -183,6 +196,11 @@ class SceneOne extends Phaser.Scene{
         tortue=this.physics.add.sprite(6000,770,'tortue');
         tortue.setCollideWorldBounds(false);
         tortue.body.setAllowGravity(false);
+        
+        // tortue2
+        tortue2=this.physics.add.sprite(2846,404,'tortue');
+        tortue2.setCollideWorldBounds(false);
+        tortue2.body.setAllowGravity(false);
         
         
         // sans collision
@@ -207,7 +225,9 @@ class SceneOne extends Phaser.Scene{
         
         
         tortue.setPushable(true);
+        tortue2.setPushable(true);
     
+        // camera
         this.cameras.main.startFollow(player, true, 0.05, 0.05);
         this.cameras.main.setBounds(0,0, 100000, 10000);
         this.physics.world.setBounds(0,0, 100000, 10000);
@@ -230,10 +250,10 @@ class SceneOne extends Phaser.Scene{
         emitter_particles_cendre = particles_cendre.createEmitter({
             x:0,
             y:0,
-            speed: 25,
+            speed: 35,
             lifespan: 1700,
-            frequency: 130,
-            quantity: 5,
+            frequency: 300,
+            quantity: 3,
             scale: { start: 1, end: 0.2 },
             blendMode: 'ADD',
         });
@@ -353,6 +373,16 @@ class SceneOne extends Phaser.Scene{
         repeat:-1
     });
         
+     // tortue2  
+    this.tweens.add({
+        targets: tortue2,
+        props: {
+            x:{value: 2483,duration:3200},
+        },
+        yoyo:true,
+        repeat:-1
+    });
+        
         // rage
     this.anims.create({
         key: 'rage',
@@ -397,13 +427,17 @@ class SceneOne extends Phaser.Scene{
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(tortue, platforms);
     this.physics.add.collider(player,tortue,hitballe,null,this);
+    this.physics.add.collider(player,tortue2,hitballe,null,this);
     this.physics.add.overlap(griffe, tortue, hitgriffe,null,this);
+    this.physics.add.overlap(griffe, tortue2, hitgriffe,null,this);
     this.physics.add.collider(player, terrain);    
     this.physics.add.overlap(player, chaire1, loup, null,this);    
     this.physics.add.overlap(player, chaire2, loup, null,this);    
+    this.physics.add.overlap(player, chaire3, loup, null,this);    
     this.physics.add.overlap(player, box, instantkill, null,this);    
+    this.physics.add.overlap(player, box2, instantkill, null,this);    
         
-        function hitballe(player,tortue) {
+        function hitballe(player,tortue,tortue2) {
         if (invincible==false){
             pdv-=1;
        
@@ -429,7 +463,7 @@ class SceneOne extends Phaser.Scene{
     }
 }
         
-        function instantkill(player,box) {
+        function instantkill(player,box,box2) {
         if (invincible==false){
             pdv-=1;
        
@@ -492,14 +526,17 @@ class SceneOne extends Phaser.Scene{
     }
         if (vietortue == true){
         tortue.anims.play('tortue', true);
+        tortue2.anims.play('tortue', true);
     }
         else {
             tortue.destroy(true,true)
+            tortue2.destroy(true,true)
         }
         
         if (viande == true){
         chaire1.anims.play('chaire', true);
         chaire2.anims.play('chaire', true);
+        chaire3.anims.play('chaire', true);
         }
 
         
@@ -540,7 +577,7 @@ class SceneOne extends Phaser.Scene{
 
                 if (cursors.up.isDown && player.body.blocked.down && canAttack == true)
                 {
-                    player.setVelocityY(-230);
+                    player.setVelocityY(-200);
                 }
 
                 if (cursors.up.isDown && cursors.right.isDown && cursors.down.isDown && player.body.blocked.down && canAttack == true)
